@@ -1,10 +1,12 @@
 .PHONY: all
-all: default
+all: program
 
-default: number.o program.o
-	gcc -o libnumber.so -shared number.o
+program: number.o program.o libnumber.so
 	gcc -o program program.o -lnumber -L.
 	
+libnumber.so: number.o
+	gcc -o libnumber.so -shared number.o
+
 
 number.o: number.c
 	gcc -c -o number.o -fPIC number.c
@@ -16,7 +18,7 @@ clean:
 	rm -f *.aux
 	
 distclean: clean
-	rm -f *.o default
+	rm -f *.o program
 
 test: program
 	-/program
